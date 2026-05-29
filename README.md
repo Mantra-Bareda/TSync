@@ -60,7 +60,7 @@ Want to run TSync on your own machine? Follow these steps:
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_GITHUB_USERNAME/TSync.git](https://github.com/YOUR_GITHUB_USERNAME/TSync.git)
+git clone [https://github.com/Mantra-Bareda/TSync.git](https://github.com/Mantra-Bareda/TSync.git)
 cd TSync
 ```
 
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 ### 3. Environment Variables
 Create a `.env` file in the root directory and add your secure keys:
 ```ini
-MONGO_URI=mongodb+srv://<username>:<password>@cluster...
+MONGO_URI=mongodb+srv://<username>:<password>@cluster... ##get it from mongodb website
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
