@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2>Create an Account</h2>
+        
+        <form id="register-form" action="{{ url_for('register') }}" method="POST">
+            <input type="text" id="reg-username" name="username" class="auth-input" placeholder="Username" required>
+            <input type="password" id="reg-password" name="password" class="auth-input" placeholder="Password" required>
+            
+            <input type="hidden" id="encrypted-sync-key" name="encrypted_sync_key" value="">
+            
+            <button type="submit" class="auth-btn">Register</button>
+        </form>
+        
+        <a href="{{ url_for('login') }}" class="auth-link">Already have an account? Login</a>
+        
+        {% if error %}
+            <p class="auth-error" style="display: block;">{{ error }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="{{ url_for('static', filename='js/crypto.js') }}"></script>
+
+<script>
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+        e.preventDefault(); 
+
+        const password = document.getElementById('reg-password').value;
+
+        // 1. Generate & Lock Key
+        const rawSyncKey = generateMasterSyncKey();
+        const wrappedKey = wrapSyncKey(rawSyncKey, password);
+
+        // 2. Put it in form
+        document.getElementById('encrypted-sync-key').value = wrappedKey;
+
+        // 3. Save locally and Submit
+        setActiveKey(rawSyncKey);
+        this.submit();
+    });
+</script>
+{% endblock %}

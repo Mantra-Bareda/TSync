@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="reminders-layout">
+    
+    <div class="pane pane-left">
+        <div class="pane-header">
+            <button class="cmd-k-btn" onclick="document.getElementById('cmd-palette').style.display='flex'">
+                Search... <span>Ctrl+K</span>
+            </button>
+            <button id="new-r-list-btn" class="icon-btn-small">+</button>
+        </div>
+        
+        <div class="smart-filters">
+            <div class="filter-box" data-filter="today"><span class="icon">⭐</span> Today <span id="badge-today" class="badge">0</span></div>
+            <div class="filter-box" data-filter="scheduled"><span class="icon">📅</span> Scheduled</div>
+            <div class="filter-box" data-filter="all"><span class="icon">📁</span> All</div>
+            <div class="filter-box" data-filter="flagged"><span class="icon">🚩</span> Flagged</div>
+        </div>
+
+        <div class="section-title">My Lists</div>
+        <div id="custom-lists-container" class="custom-lists"></div>
+    </div>
+
+    <div class="pane pane-middle">
+        <div class="pane-header">
+            <h1 id="current-view-title" class="view-title">Loading...</h1>
+            <button class="icon-btn-small" title="Sort Options">⇅</button>
+        </div>
+        
+        <div class="nlp-input-wrapper">
+            <div id="nlp-input" contenteditable="true" data-placeholder="💡 Type a reminder... (e.g., Review contract tomorrow at 4pm)"></div>
+            <button id="submit-reminder-btn" class="nlp-submit-btn" title="Add Reminder">↑</button>
+        </div>
+
+        <div id="reminder-list" class="reminder-list"></div>
+    </div>
+    <div id="detail-pane" class="pane pane-right closed">
+        <div class="pane-header right-header">
+            <h3>Details</h3>
+            <div>
+                <button id="toggle-cal-btn" class="icon-btn-small">📅</button>
+                <button id="close-detail-btn" class="icon-btn-small">✕</button>
+            </div>
+        </div>
+        
+        <div id="detail-content" class="detail-content">
+            <textarea id="detail-notes" placeholder="Add notes, URLs, or code snippets..."></textarea>
+            
+            <div class="detail-section">
+                <h4>Due Date</h4>
+                <input type="datetime-local" id="detail-date-picker" class="modern-input">
+                <div class="quick-dates">
+                    <button class="chip" data-days="0">Tonight</button>
+                    <button class="chip" data-days="1">Tomorrow</button>
+                    <button class="chip" data-days="7">Next Week</button>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Attachments</h4>
+                <div class="drop-zone" id="r-drop-zone">📎 Drag & Drop files here</div>
+            </div>
+        </div>
+
+        <div id="mini-cal-content" class="detail-content" style="display: none;">
+            <h4>Drag tasks here to reschedule</h4>
+            <div id="mini-cal-grid" class="mini-cal"></div>
+        </div>
+    </div>
+
+</div>
+
+<div id="undo-toast" class="toast hidden">
+    <span>Task deleted.</span>
+    <button id="undo-btn">Undo</button>
+</div>
+
+<div id="cmd-palette" class="modal-overlay" style="display: none;">
+    <div class="cmd-box">
+        <input type="text" id="cmd-input" placeholder="Search tasks, lists, or actions...">
+        <div id="cmd-results" class="cmd-results"></div>
+    </div>
+</div>
+
+<div id="cheat-sheet-modal" class="modal-overlay" style="display: none;">
+    <div class="cheat-sheet-box">
+        <h2>🚀 Master Cheat Sheet</h2>
+        <div id="cheat-sheet-content"></div>
+        <div class="help-text">Press Esc to close</div>
+    </div>
+</div>
+<div id="context-menu" class="context-menu" style="display: none;"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chrono-node@2.3.8/dist/chrono.min.js"></script>
+<script src="{{ url_for('static', filename='js/reminders.js') }}"></script>
+{% endblock %}

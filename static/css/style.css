@@ -1,0 +1,692 @@
+/* --- 1. THEMES & VARIABLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+    /* Light Theme (Earth-Drawn) */
+    --background: #FDFCF8;       
+    --foreground: #2C2C24;       
+    --primary: #5D7052;          
+    --primary-fg: #F3F4F1;       
+    --secondary: #C18C5D;        
+    --secondary-fg: #FFFFFF;     
+    --accent: #E6DCCD;           
+    --accent-fg: #4A4A40;        
+    --muted: #F0EBE5;            
+    --muted-fg: #78786C;         
+    --border: #DED8CF;           
+    --destructive: #A85448;      
+    --hover-bg: #E6DCCD;
+    
+    /* Nav & Shadows */
+    --nav-bg: rgba(253, 252, 248, 0.7);
+    --border-subtle: rgba(222, 216, 207, 0.5);
+    --ring-color: rgba(93, 112, 82, 0.3);
+    --shadow-soft: 0 4px 12px rgba(93, 112, 82, 0.1);
+    --shadow-deep: 0 6px 24px -4px rgba(93, 112, 82, 0.25);
+    --shadow-float: 0 20px 40px -10px rgba(193, 140, 93, 0.2);
+    --shadow-nav: 0 4px 20px -2px rgba(93, 112, 82, 0.15);
+}
+
+body.dark-theme {
+    /* Dark Theme (Premium Tech) */
+    --background: #050506;       
+    --foreground: #EDEDEF;       
+    --primary: #5E6AD2;          
+    --primary-fg: #FFFFFF;       
+    --secondary: rgba(255,255,255,0.05); 
+    --secondary-fg: #EDEDEF;     
+    --accent: #0a0a0c;           
+    --accent-fg: #8A8F98;        
+    --muted: #0F0F12;            
+    --muted-fg: rgba(255,255,255,0.60);  
+    --border: rgba(255,255,255,0.06);    
+    --destructive: #E5484D;      
+    --hover-bg: rgba(255,255,255,0.08);
+
+    /* Nav & Shadows */
+    --nav-bg: rgba(5, 5, 6, 0.7);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --ring-color: rgba(94, 106, 210, 0.3);
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-deep: 0 0 15px rgba(94,106,210,0.3); 
+    --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.8);
+    --shadow-nav: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+}
+
+/* --- 2. GLOBAL RESET & TYPOGRAPHY --- */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+body { display: flex; flex-direction: column; height: 100vh; background-color: var(--background); color: var(--foreground); overflow: hidden; transition: background-color 0.4s ease, color 0.4s ease; }
+
+/* --- 3. NAVIGATION BAR (Glassmorphism) --- */
+.nav-wrapper { padding: 0.8rem 1rem; position: relative; z-index: 50; }
+.navbar { display: flex; align-items: center; justify-content: space-between; padding: 0.3rem 0.8rem; border-radius: 9999px; background-color: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-nav); transition: all 0.3s ease; }
+
+.nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 1rem; text-decoration: none; color: var(--foreground); }
+.nav-logo { display: flex; height: 32px; width: 32px; align-items: center; justify-content: center; border-radius: 9999px; background-color: var(--primary); color: var(--primary-fg); font-weight: bold; font-size: 1rem; }
+
+.nav-links { display: flex; align-items: center; gap: 4px; }
+.nav-link { font-size: 0.9rem; font-weight: 500; color: var(--foreground); text-decoration: none; padding: 6px 14px; border-radius: 9999px; transition: all 0.3s ease; outline: none; }
+.nav-link:hover { color: var(--primary); background: var(--hover-bg); }
+.nav-link:focus-visible { box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring-color); }
+
+/* New Settings Icon with Rotation */
+.settings-icon { display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; color: var(--foreground); padding: 6px; border-radius: 50%; transition: transform 0.5s ease, color 0.3s ease, background 0.3s ease; }
+.settings-icon:hover { transform: rotate(90deg); color: var(--primary); background: var(--hover-bg); }
+.settings-icon svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.mobile-menu-btn { display: none; background: transparent; border: none; font-size: 1.5rem; color: var(--foreground); cursor: pointer; padding: 5px; }
+.mobile-dropdown { position: absolute; top: 100%; left: 1rem; right: 1rem; margin-top: 0.5rem; background-color: var(--background); border-radius: 2rem; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-float); padding: 1.5rem; display: none; flex-direction: column; gap: 8px; z-index: 40; }
+.mobile-dropdown.active { display: flex; animation: popIn 0.3s ease forwards; }
+
+@media (max-width: 850px) {
+    .nav-links { display: none; }
+    .mobile-menu-btn { display: block; }
+}
+
+/* --- 4. APP LAYOUT --- */
+#app-container { flex-grow: 1; display: flex; overflow: hidden; border-top: 1px solid var(--border); }
+
+/* --- 5. BOLD ANIMATIONS --- */
+@keyframes popIn { 0% { opacity: 0; transform: translateY(10px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes slideOutFade { 0% { opacity: 1; transform: scale(1) translateX(0); max-height: 100px; padding: 14px 20px; margin-bottom: 15px; } 100% { opacity: 0; transform: scale(0.8) translateX(50px); max-height: 0; padding: 0; margin-bottom: 0; border: none; overflow: hidden; } }
+.deleting { animation: slideOutFade 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important; pointer-events: none; }
+
+/* --- 6. SIDEBAR --- */
+#sidebar { width: 280px; background-color: var(--muted); padding: 20px; display: flex; flex-direction: column; border-right: 1px solid var(--border); transition: background-color 0.4s, border-color 0.4s; }
+#sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 600; font-size: 1.2rem; }
+.header-actions { display: flex; gap: 8px; }
+.chat-list-item { padding: 12px; border-radius: 8px; cursor: pointer; margin-bottom: 5px; font-weight: 500; color: var(--accent-fg); transition: all 0.3s ease; animation: popIn 0.4s ease forwards; }
+.chat-list-item:hover { background: var(--hover-bg); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+.chat-list-item.active { background: var(--primary); color: var(--primary-fg); box-shadow: var(--shadow-deep); }
+
+/* Stretch chat list to allow double-clicking empty space */
+#chat-list { flex-grow: 1; overflow-y: auto; padding-bottom: 20px; }
+
+/* Inline Editing State */
+.chat-list-item[contenteditable="true"] {
+    background: var(--background);
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 0 2px var(--ring-color);
+    outline: none;
+    cursor: text;
+    user-select: text;
+}
+
+/* --- 7. BUTTONS --- */
+button { transition: all 0.3s ease; }
+.action-btn { background: var(--secondary); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; cursor: pointer; color: var(--secondary-fg); font-weight: 500; box-shadow: var(--shadow-soft); }
+.action-btn:hover { transform: scale(1.05); box-shadow: var(--shadow-deep); border-color: var(--primary); }
+.action-btn:active { transform: scale(0.95); }
+#send-btn { background: transparent; border: none; color: var(--primary); font-weight: bold; cursor: pointer; padding: 10px 15px; border-radius: 50px; }
+#send-btn:hover { background: var(--secondary); transform: scale(1.05); }
+
+/* --- 8. MAIN CHAT AREA --- */
+#main-area { flex-grow: 1; display: flex; flex-direction: column; background: var(--background); transition: background-color 0.4s; }
+#chat-header { padding: 20px 30px; border-bottom: 1px solid var(--border); font-size: 1.2rem; font-weight: 600; transition: border-color 0.4s; }
+#chat-box { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+
+/* --- 9. MESSAGES --- */
+.message-wrapper { display: flex; justify-content: flex-end; align-items: center; gap: 10px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; cursor: context-menu; transform-origin: right center; }
+.message { background: var(--muted); color: var(--foreground); padding: 14px 20px; border-radius: 20px 20px 0px 20px; max-width: 70%; line-height: 1.5; box-shadow: var(--shadow-soft); transition: all 0.3s ease; border: 1px solid transparent; }
+.message-wrapper:hover .message, .message-wrapper:hover .file-block { transform: scale(1.02) translateY(-2px); box-shadow: var(--shadow-float); }
+.message-wrapper.selected .message, .message-wrapper.selected .file-block { background: var(--accent); border: 1px solid var(--primary); box-shadow: var(--shadow-deep); }
+
+/* --- 10. INPUT AREA --- */
+#input-area { padding: 20px 30px; background: var(--background); transition: background-color 0.4s; }
+.input-container { display: flex; background: var(--muted); border: 1px solid var(--border); border-radius: 30px; padding: 5px 10px 5px 20px; align-items: center; transition: all 0.3s ease; }
+.input-container:focus-within { border-color: var(--primary); box-shadow: var(--shadow-deep); }
+#msg-input { flex-grow: 1; border: none; background: transparent; padding: 12px 0; outline: none; font-size: 1rem; color: var(--foreground); }
+#msg-input::placeholder { color: var(--muted-fg); }
+
+/* --- 11. MENUS & MULTI-SELECT --- */
+#context-menu { position: fixed; background: var(--muted); border-radius: 12px; box-shadow: var(--shadow-float); border: 1px solid var(--border); padding: 5px 0; min-width: 150px; z-index: 1000; display: none; }
+.context-menu-item { padding: 10px 15px; cursor: pointer; font-size: 0.95rem; font-weight: 500; color: var(--foreground); transition: background 0.3s ease; }
+.context-menu-item:hover { background: var(--hover-bg); }
+.context-menu-item.danger { color: var(--destructive); }
+
+#multi-select-bar { display: none; position: absolute; top: 0; left: 280px; right: 0; background: var(--accent); border-bottom: 1px solid var(--border); padding: 15px 30px; align-items: center; justify-content: space-between; z-index: 100; box-shadow: var(--shadow-deep); animation: popIn 0.3s ease forwards; }
+#delete-selected-btn { background: var(--destructive); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+#cancel-select-btn { background: transparent; color: var(--foreground); border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 500;}
+
+/* --- 12. ATTACHMENT MENU --- */
+#attach-btn { background: transparent; border: none; color: var(--muted-fg); font-size: 1.8rem; line-height: 1; cursor: pointer; padding: 0 15px 0 5px; transition: all 0.3s ease; }
+#attach-btn:hover:not(:disabled) { color: var(--primary); transform: scale(1.1) rotate(90deg); }
+#attach-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+#attach-menu { position: absolute; bottom: 80px; left: 30px; background: var(--muted); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-float); display: none; flex-direction: column; overflow: hidden; transform-origin: bottom left; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; z-index: 100; min-width: 150px; }
+.attach-option { padding: 12px 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--foreground); transition: background 0.3s; font-weight: 500; font-size: 0.95rem; }
+.attach-option:hover { background: var(--hover-bg); }
+
+/* --- 13. FILE BLOCK UI & HOVER ANIMATIONS --- */
+.file-block { display: flex; flex-direction: column; min-width: 250px; max-width: 320px; height: 64px; background: var(--muted); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; color: var(--foreground); transition: all 0.3s ease; box-shadow: var(--shadow-soft); position: relative; }
+.file-block:hover { border-color: var(--primary); box-shadow: var(--shadow-float); transform: translateY(-2px); }
+
+.file-content-default { display: flex; height: 100%; width: 100%; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; transform: translateY(0); }
+.file-logo { width: 20%; height: 100%; display: flex; justify-content: center; align-items: center; background: var(--accent); font-size: 1.5rem; border-right: 1px solid var(--border); }
+.file-info-area { width: 80%; height: 100%; display: flex; flex-direction: column; }
+.file-type-label { height: 50%; display: flex; align-items: center; padding: 0 15px; font-weight: 600; font-size: 0.9rem; color: var(--accent-fg); text-transform: capitalize; border-bottom: 1px solid var(--border); }
+.file-name-row { height: 50%; display: flex; align-items: center; padding: 0 15px; font-size: 0.85rem; color: var(--foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; gap: 6px; }
+.file-size-label { color: var(--muted-fg); font-weight: normal; font-size: 0.8rem; }
+
+.file-content-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; opacity: 0; transform: translateY(100%); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); background: var(--muted); }
+.file-block:hover .file-content-default { opacity: 0; transform: translateY(-100%); }
+.file-block:hover .file-content-hover { opacity: 1; transform: translateY(0); }
+
+.file-download-btn { width: 20%; display: flex; justify-content: center; align-items: center; background: var(--primary); color: var(--primary-fg); border-right: 1px solid var(--border); transition: filter 0.2s; text-decoration: none; }
+.file-download-btn:hover { filter: brightness(1.2); }
+.file-download-btn svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.file-open-area { width: 80%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--primary); font-size: 1rem; transition: background 0.2s; }
+.file-open-area:hover { background: var(--hover-bg); }
+
+/* --- 14. AUTHENTICATION PAGES --- */
+.auth-wrapper { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.auth-card { background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-float); border-radius: 24px; padding: 40px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 24px; animation: popIn 0.5s ease; }
+.auth-title { font-size: 1.8rem; font-weight: 600; text-align: center; color: var(--foreground); }
+
+.auth-form { display: flex; flex-direction: column; gap: 20px; }
+.auth-input-group { display: flex; flex-direction: column; gap: 8px; }
+.auth-label { font-size: 0.9rem; font-weight: 500; color: var(--accent-fg); }
+.auth-input { background: var(--muted); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--foreground); font-size: 1rem; transition: all 0.3s ease; outline: none; }
+.auth-input:focus { border-color: var(--primary); box-shadow: var(--shadow-deep); }
+
+.auth-btn { background: var(--primary); color: var(--primary-fg); border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow-soft); }
+.auth-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-deep); filter: brightness(1.1); }
+
+.auth-footer { text-align: center; font-size: 0.9rem; color: var(--accent-fg); }
+.auth-link { color: var(--primary); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+.auth-link:hover { text-decoration: underline; }
+
+.auth-error { background: rgba(229, 72, 77, 0.1); color: var(--destructive); border: 1px solid var(--destructive); padding: 12px; border-radius: 12px; font-size: 0.9rem; text-align: center; font-weight: 500; }
+
+/* --- 15. HOME DASHBOARD --- */
+.home-wrapper { 
+    padding: 40px; 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 40px; 
+    overflow-y: auto; 
+    animation: popIn 0.5s ease forwards;
+}
+
+.home-header { display: flex; flex-direction: column; gap: 8px; }
+.home-title { font-size: 2.5rem; font-weight: 600; color: var(--foreground); }
+.home-subtitle { font-size: 1.1rem; color: var(--accent-fg); }
+
+/* The Grid (Max 3 Columns) */
+.feature-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 24px; 
+}
+
+@media (min-width: 1024px) {
+    .feature-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Glassmorphic Cards */
+.feature-card { 
+    background: var(--nav-bg); 
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle); 
+    border-radius: 24px; 
+    padding: 32px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 16px; 
+    cursor: pointer; 
+    text-decoration: none; 
+    color: var(--foreground); 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    box-shadow: var(--shadow-soft); 
+}
+
+.feature-card:hover { 
+    transform: translateY(-6px); 
+    box-shadow: var(--shadow-float); 
+    border-color: var(--primary); 
+}
+
+.feature-icon { 
+    width: 56px; 
+    height: 56px; 
+    border-radius: 16px; 
+    background: var(--primary); 
+    color: var(--primary-fg); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 1.8rem; 
+    margin-bottom: 8px; 
+    box-shadow: var(--shadow-soft);
+}
+
+.feature-title { font-size: 1.4rem; font-weight: 600; }
+.feature-desc { font-size: 0.95rem; color: var(--accent-fg); line-height: 1.6; }
+
+
+/* --- 16. NOTION-STYLE TODO UI --- */
+.todo-main-wrapper { width: 100%; max-width: 800px; padding: 40px 20px; display: flex; flex-direction: column; gap: 30px; animation: popIn 0.4s ease forwards; }
+
+.todo-top-bar { display: flex; gap: 10px; align-items: center; }
+.todo-dropdown { flex-grow: 1; background: var(--nav-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; font-size: 1.2rem; font-weight: 600; color: var(--foreground); outline: none; box-shadow: var(--shadow-soft); cursor: pointer; }
+.todo-dropdown:focus { border-color: var(--primary); }
+
+.todo-tree-container { display: flex; flex-direction: column; gap: 4px; }
+
+/* The Dashed Add Box */
+.add-task-box { border: 2px dashed var(--border); border-radius: 12px; padding: 16px; text-align: center; color: var(--muted-fg); font-weight: 600; cursor: pointer; transition: all 0.2s ease; margin-top: 10px; }
+.add-task-box:hover { border-color: var(--primary); color: var(--primary); background: var(--hover-bg); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+
+/* The Task Row */
+.task-wrapper { display: flex; flex-direction: column; }
+.task-row { display: flex; align-items: center; padding: 8px 12px; border-radius: 8px; transition: background 0.2s; position: relative; }
+.task-row:hover { background: var(--hover-bg); }
+
+.task-checkbox { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); margin-right: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.task-checkbox:hover { border-color: var(--primary); }
+.task-checkbox.checked { background: var(--primary); border-color: var(--primary); }
+.task-checkbox.checked::after { content: '✓'; color: var(--primary-fg); font-size: 0.8rem; font-weight: bold; }
+
+.task-content { flex-grow: 1; display: flex; align-items: center; gap: 8px; cursor: pointer; position: relative; }
+.task-title { font-size: 1rem; color: var(--foreground); transition: color 0.2s; }
+.task-row.completed .task-title { text-decoration: line-through; color: var(--muted-fg); }
+
+/* Hover Actions (+, Edit, Delete) */
+.task-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
+.task-row:hover .task-actions { opacity: 1; }
+.task-icon-btn { background: var(--muted); border: 1px solid var(--border); border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--foreground); font-size: 0.9rem; transition: all 0.2s; }
+.task-icon-btn:hover { border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
+.task-icon-btn.danger:hover { border-color: var(--destructive); color: var(--destructive); }
+
+/* Description Tooltip */
+.task-desc-icon { color: var(--muted-fg); font-size: 0.8rem; background: var(--muted); padding: 2px 6px; border-radius: 4px; cursor: help; }
+.task-desc-tooltip { position: absolute; left: 0; top: 100%; background: var(--nav-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); padding: 12px; border-radius: 8px; box-shadow: var(--shadow-float); z-index: 10; font-size: 0.9rem; color: var(--foreground); width: max-content; max-width: 300px; opacity: 0; pointer-events: none; transition: opacity 0.2s; margin-top: 4px; }
+.task-content:hover .task-desc-tooltip { opacity: 1; pointer-events: auto; }
+
+/* The Input Form */
+.task-input-form { background: var(--nav-bg); backdrop-filter: blur(12px); border: 1px solid var(--primary); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow-deep); margin: 8px 0; animation: popIn 0.2s ease forwards; }
+.task-title-input { border: none; background: transparent; font-size: 1.1rem; color: var(--foreground); outline: none; font-weight: 500; }
+.task-desc-input { border: none; background: transparent; font-size: 0.9rem; color: var(--muted-fg); outline: none; }
+.task-input-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; border-top: 1px solid var(--border-subtle); padding-top: 10px; }
+.save-task-btn { background: var(--primary); color: var(--primary-fg); border: none; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+.cancel-task-btn { background: transparent; color: var(--foreground); border: 1px solid var(--border); padding: 6px 16px; border-radius: 6px; cursor: pointer; }
+
+/* Child Tasks Indentation */
+.task-children { margin-left: 28px; border-left: 1px solid var(--border-subtle); padding-left: 8px; }
+
+/* --- 17. DIARY & CALENDAR UI --- */
+.calendar-widget { background: var(--nav-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: var(--shadow-soft); display: flex; flex-direction: column; gap: 15px; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 1.1rem; color: var(--foreground); }
+.cal-nav-btn { background: transparent; border: none; cursor: pointer; color: var(--accent-fg); font-size: 1.2rem; transition: color 0.2s; padding: 4px; }
+.cal-nav-btn:hover { color: var(--primary); }
+
+.calendar-days-header { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--muted-fg); margin-bottom: 5px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-weight: 500; color: var(--foreground); cursor: pointer; transition: all 0.2s ease; border: 1px solid transparent; }
+.cal-day:hover:not(.empty) { border-color: var(--primary); background: var(--hover-bg);color: var(--primary); }
+.cal-day.active { background: var(--primary); color: var(--primary-fg); box-shadow: var(--shadow-deep); font-weight: bold; }
+.cal-day.empty { cursor: default; }
+/* Highlight Today's Date */
+.cal-day.today { border: 2px dashed var(--primary); font-weight: bold; }
+
+.diary-text-content { font-family: 'Inter', sans-serif; font-size: 1.1rem; line-height: 1.8; color: var(--foreground); white-space: pre-wrap; padding: 10px; flex-grow: 1; }
+.diary-textarea { width: 100%; flex-grow: 1; background: transparent; border: none; font-family: 'Inter', sans-serif; font-size: 1.1rem; line-height: 1.8; color: var(--foreground); outline: none; resize: none; padding: 10px; }
+.diary-textarea::placeholder { color: var(--muted-fg); }
+
+/* --- 18. REMINDERS (THREE-PANE UX) --- */
+.reminders-layout { display: flex; height: calc(100vh - 60px); width: 100%; overflow: hidden; background: var(--background); }
+
+.pane { display: flex; flex-direction: column; overflow-y: auto; padding: 20px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.pane-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; min-height: 40px; }
+
+/* Left Pane */
+.pane-left { width: 20%; min-width: 250px; background: var(--nav-bg); border-right: 1px solid var(--border); }
+.cmd-k-btn { flex-grow: 1; display: flex; justify-content: space-between; background: var(--muted); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; color: var(--muted-fg); font-size: 0.9rem; cursor: pointer; margin-right: 10px; }
+.smart-filters { display: flex; flex-direction: column; gap: 4px; margin-bottom: 30px; }
+.filter-box { display: flex; align-items: center; padding: 10px; border-radius: 8px; cursor: pointer; color: var(--foreground); font-weight: 500; transition: background 0.2s; }
+.filter-box:hover { background: var(--hover-bg); }
+.filter-box.active { background: var(--primary); color: var(--primary-fg); }
+.filter-box .icon { margin-right: 12px; font-size: 1.2rem; }
+.filter-box .badge { margin-left: auto; background: var(--accent); color: var(--primary-fg); font-size: 0.8rem; padding: 2px 8px; border-radius: 12px; }
+.section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--muted-fg); margin-bottom: 10px; padding-left: 10px; }
+.custom-list-item { padding: 8px 10px; border-radius: 6px; cursor: pointer; color: var(--foreground); margin-bottom: 2px; }
+.custom-list-item:hover { background: var(--hover-bg); }
+.custom-list-item.active { background: var(--muted); font-weight: bold; }
+
+/* Middle Pane */
+.pane-middle { flex: 1; min-width: 400px; padding: 40px 60px; }
+.view-title { font-size: 2.5rem; font-weight: 800; color: var(--foreground); margin: 0; }
+.nlp-input-wrapper { background: var(--nav-bg); border: 2px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 30px; box-shadow: var(--shadow-soft); transition: border 0.3s; }
+.nlp-input-wrapper:focus-within { border-color: var(--primary); box-shadow: var(--shadow-deep); }
+#nlp-input { font-size: 1.2rem; color: var(--foreground); outline: none; min-height: 28px; white-space: pre-wrap; word-wrap: break-word; }
+#nlp-input:empty:before { content: attr(data-placeholder); color: var(--muted-fg); pointer-events: none; }
+
+.reminder-list { display: flex; flex-direction: column; gap: 8px; }
+.reminder-row { display: flex; align-items: center; padding: 12px; border-radius: 8px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: background 0.2s; }
+.reminder-row:hover { background: var(--hover-bg); border-bottom-color: transparent; }
+.reminder-row.selected { background: var(--muted); border: 1px solid var(--border); }
+.r-checkbox { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); margin-right: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: 0.2s; }
+.r-checkbox:hover { border-color: var(--primary); }
+.r-checkbox.checked { background: var(--primary); border-color: var(--primary); }
+.r-checkbox.checked::after { content: '✓'; color: var(--primary-fg); font-size: 0.9rem; font-weight: bold; }
+.reminder-row.completed .r-content { text-decoration: line-through; opacity: 0.5; }
+.r-content { flex-grow: 1; display: flex; align-items: center; gap: 12px; font-size: 1.1rem; color: var(--foreground); }
+.r-tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; background: var(--muted); color: var(--accent-fg); font-weight: 600; }
+.r-tag.overdue { background: rgba(229, 72, 77, 0.1); color: var(--destructive); }
+
+/* Hover Actions */
+.r-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
+.reminder-row:hover .r-actions { opacity: 1; }
+.r-actions button { background: transparent; border: none; font-size: 1.1rem; cursor: pointer; padding: 4px; border-radius: 4px; color: var(--muted-fg); }
+.r-actions button:hover { background: var(--border); color: var(--foreground); }
+.r-actions button.danger:hover { color: var(--destructive); }
+
+/* Right Pane (Inspector) */
+.pane-right { width: 30%; min-width: 350px; background: var(--nav-bg); border-left: 1px solid var(--border); box-shadow: -10px 0 20px rgba(0,0,0,0.05); }
+.pane-right.closed { width: 0; min-width: 0; padding: 0; overflow: hidden; opacity: 0; border: none; }
+.right-header { border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
+.detail-content { display: flex; flex-direction: column; gap: 20px; }
+#detail-notes { width: 100%; height: 120px; background: var(--muted); border: 1px solid var(--border); border-radius: 8px; padding: 12px; color: var(--foreground); resize: none; font-family: inherit; }
+.detail-section h4 { margin: 0 0 10px 0; font-size: 0.9rem; color: var(--muted-fg); text-transform: uppercase; }
+.modern-input { width: 100%; background: var(--background); border: 1px solid var(--border); padding: 10px; border-radius: 8px; color: var(--foreground); font-family: inherit; margin-bottom: 10px; }
+.quick-dates { display: flex; gap: 8px; }
+.chip { background: var(--muted); border: 1px solid var(--border); padding: 6px 12px; border-radius: 16px; cursor: pointer; font-size: 0.85rem; color: var(--foreground); }
+.chip:hover { background: var(--primary); color: var(--primary-fg); }
+.drop-zone { border: 2px dashed var(--border); border-radius: 8px; padding: 30px; text-align: center; color: var(--muted-fg); cursor: pointer; }
+
+/* Mini Calendar Drag Target */
+.mini-cal { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.mini-cal-box { background: var(--nav-bg); border: 1px solid var(--border); padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+
+/* Global Toast */
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--nav-bg); border: 1px solid var(--border); box-shadow: var(--shadow-deep); padding: 12px 20px; border-radius: 30px; display: flex; align-items: center; gap: 20px; z-index: 9999; transition: opacity 0.3s, transform 0.3s; }
+.toast.hidden { opacity: 0; pointer-events: none; transform: translate(-50%, 20px); }
+.toast span { color: var(--foreground); font-weight: 500; }
+.toast button { background: var(--primary); color: var(--primary-fg); border: none; padding: 6px 16px; border-radius: 16px; cursor: pointer; font-weight: bold; }
+
+/* Modals */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 10000; justify-content: center; align-items: flex-start; padding-top: 15vh; }
+.cmd-box { background: var(--nav-bg); width: 100%; max-width: 600px; border-radius: 12px; box-shadow: var(--shadow-deep); border: 1px solid var(--border); overflow: hidden; animation: popIn 0.2s ease; }
+#cmd-input { width: 100%; padding: 20px; font-size: 1.2rem; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--foreground); outline: none; }
+.cheat-sheet-box { background: var(--nav-bg); width: 100%; max-width: 800px; border-radius: 12px; padding: 40px; box-shadow: var(--shadow-deep); border: 1px solid var(--border); max-height: 70vh; overflow-y: auto; color: var(--foreground); animation: popIn 0.2s ease; }
+.help-text { text-align: center; color: var(--muted-fg); font-size: 0.9rem; margin-top: 30px; }
+
+
+/* Fix for the missing Small Action Buttons (+ and Sort) */
+.icon-btn-small { background: transparent; border: 1px solid var(--border); color: var(--foreground); width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; font-size: 1.1rem; }
+.icon-btn-small:hover { background: var(--muted); border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+
+/* Update the Input Wrapper to align the new button */
+.nlp-input-wrapper { display: flex; align-items: center; gap: 12px; }
+#nlp-input { flex-grow: 1; min-width: 0; }
+
+/* Fixed: Removed pointer-events that were blocking clicks */
+.nlp-submit-btn { background: var(--primary); color: var(--primary-fg); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.5; }
+.nlp-input-wrapper:focus-within .nlp-submit-btn { opacity: 1; }
+.nlp-submit-btn:hover { transform: scale(1.1); box-shadow: var(--shadow-soft); filter: brightness(1.1); opacity: 1; }
+
+/* --- 19. UX IMPROVEMENTS: INLINE EDITING & CONTEXT MENU --- */
+.custom-lists { flex-grow: 1; overflow-y: auto; padding-bottom: 20px; }
+
+/* Highlight the list item when renaming */
+.custom-list-item[contenteditable="true"] { background: var(--background); border: 1px solid var(--primary); outline: none; cursor: text; user-select: text; box-shadow: 0 0 0 2px var(--ring-color); }
+
+/* Right-Click Context Menu */
+.context-menu { position: absolute; background: var(--nav-bg); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-deep); padding: 6px; min-width: 150px; z-index: 99999; }
+.context-menu-item { padding: 8px 12px; border-radius: 6px; cursor: pointer; color: var(--foreground); font-size: 0.9rem; transition: background 0.2s; }
+.context-menu-item:hover { background: var(--hover-bg); }
+.context-menu-item.danger { color: var(--destructive); }
+.context-menu-item.danger:hover { background: rgba(229, 72, 77, 0.1); }
+
+/* --- 20. MOBILE RESPONSIVENESS & UI ADAPTATIONS --- */
+@media (max-width: 768px) {
+    
+    /* 1. General Layout: Stack sidebars on top of the main canvas */
+    #app-container, .reminders-layout { 
+        flex-direction: column; 
+    }
+    
+    /* 2. Sidebars transform into horizontal scrollable tab bars */
+    #sidebar, .pane-left { 
+        width: 100%; 
+        min-width: 100%; 
+        height: auto; 
+        max-height: 180px; 
+        border-right: none; 
+        border-bottom: 1px solid var(--border); 
+        padding: 15px; 
+        flex-shrink: 0; 
+    }
+    
+    /* Hide scrollbars for a clean native app feel */
+    #chat-list, #todo-sidebar-list, .custom-lists { 
+        display: flex; 
+        flex-direction: row; 
+        overflow-x: auto; 
+        padding-bottom: 5px; 
+        gap: 10px; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+    }
+    #chat-list::-webkit-scrollbar, #todo-sidebar-list::-webkit-scrollbar, .custom-lists::-webkit-scrollbar { 
+        display: none; 
+    }
+    
+    /* Style the list items as clickable pill tabs */
+    .chat-list-item, .custom-list-item { 
+        white-space: nowrap; 
+        margin: 0; 
+        padding: 8px 16px; 
+        background: var(--muted); 
+        border-radius: 20px; 
+        border: 1px solid transparent; 
+    }
+    .chat-list-item.active, .custom-list-item.active { 
+        border-color: var(--primary); 
+        background: transparent; 
+        color: var(--primary);
+    }
+
+    /* 3. Main Working Canvas takes the remaining height */
+    #main-area, .pane-middle { 
+        min-width: 100%; 
+        width: 100%; 
+        padding: 15px; 
+        flex-grow: 1; 
+        height: auto; 
+    }
+    
+    /* 4. Force Hover Actions to always show on touch screens */
+    .task-actions, .r-actions, .message-actions { 
+        opacity: 1; 
+    }
+    
+    /* --- REMINDERS SPECIFIC MOBILE TWEAKS --- */
+    
+    /* Grid layout for smart filters to save vertical space */
+    .smart-filters { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px; 
+        margin-bottom: 15px; 
+    }
+    .view-title { font-size: 1.8rem; }
+    
+    /* Right Pane (Detail Inspector) turns into a full-screen slide-over modal */
+    .pane-right { 
+        position: fixed; 
+        top: 60px; /* Below the navbar */
+        right: 0; 
+        width: 100%; 
+        height: calc(100vh - 60px); 
+        z-index: 1000; 
+        box-shadow: -10px 0 30px rgba(0,0,0,0.8); 
+        border-left: none; 
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        transform: translateX(0); 
+        background: var(--background); 
+        padding: 20px !important; /* Force padding overrides */
+        opacity: 1 !important; 
+    }
+    .pane-right.closed { 
+        transform: translateX(100%); 
+    }
+    
+    /* FEATURE REMOVAL: Disable Drag & Drop & Mini-Cal on Mobile */
+    .r-actions button:last-child { display: none; } /* Hides drag handle */
+    #toggle-cal-btn { display: none; } /* Hides mini-calendar toggle */
+    
+    /* --- TODO SPECIFIC MOBILE TWEAKS --- */
+    .task-input-form { width: 100%; padding: 15px 10px; }
+    .task-row { flex-wrap: wrap; }
+    
+    /* --- DIARY SPECIFIC MOBILE TWEAKS --- */
+    /* Let the calendar grid expand fully on mobile */
+    #sidebar { max-height: none; } 
+    #diary-display-date { font-size: 1.6rem; }
+    #diary-controls { flex-wrap: wrap; }
+    
+    /* --- GLOBAL MODALS --- */
+    .cmd-box, .cheat-sheet-box { 
+        width: 95%; 
+        max-height: 80vh; 
+        padding: 20px; 
+    }
+    .auth-card {
+        padding: 30px 20px;
+        margin: 15px;
+    }
+}
+
+/* --- 21. CHAT FLEXBOX FIX & BUTTON ANIMATION --- */
+
+/* Lock the main area height so the input box stays visible */
+#main-area {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px); 
+    height: calc(100dvh - 60px); /* 100dvh ignores mobile browser URL bars */
+    overflow: hidden; 
+}
+
+#chat-box {
+    flex-grow: 1; /* Takes 90% of the space automatically */
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+#input-area {
+    flex-shrink: 0; /* Takes ~10% of the space, pinned to bottom */
+    background: var(--nav-bg);
+    border-top: 1px solid var(--border);
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+}
+
+/* Send Button Animation Logic */
+#send-btn {
+    width: 80px;
+    height: 40px;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#send-btn .btn-icon { display: none; width: 18px; height: 18px; fill: none; }
+#send-btn .btn-text { transition: opacity 0.2s; }
+
+/* The 'Typing' State triggered by Javascript */
+#send-btn.typing { width: 40px; border-radius: 50%; }
+#send-btn.typing .btn-text { display: none; }
+#send-btn.typing .btn-icon { display: block; }
+
+@media (max-width: 768px) {
+    /* Mobile Override: Always show the circular icon */
+    #send-btn { width: 40px; border-radius: 50%; }
+    #send-btn .btn-text { display: none; }
+    #send-btn .btn-icon { display: block; }
+    #input-area { padding-bottom: max(15px, env(safe-area-inset-bottom)); } /* iPhone notch fix */
+}
+
+/* --- 22. AUTHENTICATION PAGES --- */
+.auth-wrapper { max-width: 400px; margin: 80px auto; padding: 20px; }
+.auth-card { background: var(--nav-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-deep); text-align: center; }
+.auth-card h2 { color: var(--foreground); margin-bottom: 20px; font-size: 1.8rem; font-weight: 800; }
+.auth-input { width: 100%; background: var(--background); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: var(--foreground); font-size: 1rem; margin-bottom: 15px; font-family: inherit; transition: border-color 0.2s; }
+.auth-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2); }
+.auth-btn { background: var(--primary); color: var(--primary-fg); width: 100%; padding: 12px; font-size: 1.1rem; margin-top: 5px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+.auth-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); filter: brightness(1.1); }
+.auth-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+.auth-link { color: var(--primary); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-top: 20px; font-weight: 500; }
+.auth-link:hover { text-decoration: underline; }
+.auth-error { color: var(--destructive); margin-top: 15px; background: rgba(229, 72, 77, 0.1); padding: 10px; border-radius: 8px; display: none; font-size: 0.9rem; font-weight: bold; }
+
+/* --- 23. REMINDERS SQUISH FIX --- */
+/* Forces the lists to keep their shape and allows scrolling instead of shrinking */
+.sidebar ul {
+    flex-grow: 1;
+    overflow-y: auto;
+    min-height: 150px; /* Guarantees the area never gets too small */
+}
+
+.sidebar li {
+    flex-shrink: 0 !important; /* Physically prevents the browser from crushing the list item */
+    min-height: 40px;
+}
+
+/* --- 24. DIARY MOBILE CALENDAR TOGGLE --- */
+/* Hide the toggle button completely on PC */
+#mobile-calendar-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--primary);
+    color: var(--primary-fg);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+    width: 100%;
+    font-size: 1rem;
+    box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 768px) {
+    /* On phones, show the toggle button AND force it to the very front */
+    #mobile-calendar-btn {
+        display: flex !important;
+        position: relative !important; 
+        z-index: 1005 !important; /* 1005 is higher than the calendar's 1000! */
+    }
+
+    /* THE FIX: Target the specific diary sidebar using the new class */
+    #sidebar.diary-mobile-sidebar {
+        display: none !important; 
+        position: absolute !important;
+        top: 60px !important; 
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100vh - 60px) !important;
+        height: calc(100dvh - 60px) !important;
+        max-height: none !important; 
+        z-index: 1000 !important; /* The calendar is at 1000 */
+        background: var(--nav-bg) !important;
+        box-shadow: var(--shadow-deep) !important;
+    }
+
+    /* Force it to open when the active class is applied */
+    #sidebar.diary-mobile-sidebar.mobile-active {
+        display: flex !important; 
+        flex-direction: column !important;
+    }
+}

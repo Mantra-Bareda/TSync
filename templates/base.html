@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSync</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="nav-wrapper">
+        <nav class="navbar">
+            <a href="/" class="nav-brand">
+                <div class="nav-logo">T</div>
+                TSync
+            </a>
+            <div class="nav-links">
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                    <a href="{{ url_for('chat') }}" class="nav-link">Chat</a>
+                    <a href="{{ url_for('todo') }}" class="nav-link">Todo</a>
+                    <a href="{{ url_for('diary') }}" class="nav-link">Diary</a>
+                    <a href="{{ url_for('reminders') }}" class="nav-link">Reminders</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                    <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                {% endif %}
+                
+                <button id="theme-toggle" class="nav-link" style="background: transparent; border: none; cursor: pointer;">🌙 Theme</button>
+                
+                {% if session.get('user_id') %}
+                    <a href="{{ url_for('settings') }}" class="settings-icon" aria-label="Settings" title="Account Settings">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+</a>
+                    <a href="{{ url_for('logout') }}" class="settings-icon" aria-label="Logout">
+                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </a>
+                {% endif %}
+            </div>
+            <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+        </nav>
+        <div class="mobile-dropdown" id="mobile-dropdown">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('chat') }}" class="nav-link">Chat</a>
+                <a href="{{ url_for('todo') }}" class="nav-link">Todo</a>
+                <a href="{{ url_for('diary') }}" class="nav-link">Diary</a>
+                <a href="{{ url_for('reminders') }}" class="nav-link">Reminders</a>
+                
+                <a href="{{ url_for('settings') }}" class="nav-link" style="color: var(--primary);">⚙️ Settings</a>
+
+                <a href="{{ url_for('logout') }}" class="nav-link" style="color: var(--destructive);">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+            {% endif %}
+            <button id="mobile-theme-toggle" class="nav-link" style="text-align: left; background: transparent; border: none; cursor: pointer;">🌙 Theme</button>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script>
+        // Bulletproof Theme & Nav Logic
+        const applyTheme = (isDark) => {
+            document.body.classList.toggle('dark-theme', isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const btns = [document.getElementById('theme-toggle'), document.getElementById('mobile-theme-toggle')];
+            btns.forEach(btn => { if(btn) btn.innerText = isDark ? '☀️ Theme' : '🌙 Theme'; });
+        };
+        if (localStorage.getItem('theme') === 'dark') applyTheme(true);
+        
+        document.getElementById('theme-toggle')?.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-theme')));
+        document.getElementById('mobile-theme-toggle')?.addEventListener('click', () => { 
+            applyTheme(!document.body.classList.contains('dark-theme')); 
+            document.getElementById('mobile-dropdown').classList.remove('active'); 
+        });
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => document.getElementById('mobile-dropdown').classList.toggle('active'));
+    </script>
+
+    {% if session.get('user_id') %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        
+        <script src="{{ url_for('static', filename='js/crypto.js') }}"></script>
+        
+        <script>
+// ... (rest of your existing code)
+            function inactivityTracker() {
+                let time;
+                const logoutTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+
+                function logout() {
+                    window.location.href = "{{ url_for('logout') }}";
+                }
+
+                function resetTimer() {
+                    clearTimeout(time);
+                    time = setTimeout(logout, logoutTime);
+                }
+
+                // Reset timer on any physical interaction
+                window.onload = resetTimer;
+                document.onmousemove = resetTimer;
+                document.onkeypress = resetTimer;
+                document.onclick = resetTimer;
+                document.onscroll = resetTimer;
+            }
+            inactivityTracker();
+        </script>
+
+        {% block scripts %}{% endblock %}
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="app-container">
+    
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <span>Conversations</span>
+            <button id="new-chat-btn" class="action-btn">+ New</button>
+        </div>
+        <div id="chat-list"></div>
+    </div>
+
+    <div id="main-area" style="position: relative;">
+        <div id="multi-select-bar">
+            <span id="select-count">0 Selected</span>
+            <div class="select-actions">
+                <button id="cancel-select-btn">Cancel</button>
+                <button id="delete-selected-btn">Delete</button>
+            </div>
+        </div>
+
+        <div id="chat-header">
+            <span id="current-chat-title">Select a chat</span>
+        </div>
+        
+        <div id="chat-box"></div>
+        
+        <div id="input-area" style="position: relative;">
+            <div id="attach-menu">
+                <div class="attach-option" data-type="image" data-accept="image/*">🖼️ Image</div>
+                <div class="attach-option" data-type="pdf" data-accept=".pdf">📄 PDF</div>
+                <div class="attach-option" data-type="video" data-accept="video/*">🎥 Video</div>
+                <div class="attach-option" data-type="other" data-accept="*">📁 Other</div>
+            </div>
+
+            <div class="input-container">
+                <button id="attach-btn" disabled>+</button>
+                <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off" disabled>
+                <button id="send-btn">
+    <span class="btn-text">Send</span>
+    <svg class="btn-icon" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+</button>
+            </div>
+            
+            <input type="file" id="hidden-file-input" style="display: none;">
+        </div>
+    </div>
+
+    <div id="context-menu"></div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

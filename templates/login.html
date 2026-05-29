@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2>Login to TSync</h2>
+        
+        <div id="login-container" style="display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" id="login-username" class="auth-input" placeholder="Username" required style="margin-bottom:0;" onkeypress="if(event.key === 'Enter') doLogin();">
+            <input type="password" id="login-password" class="auth-input" placeholder="Password" required style="margin-bottom:0;" onkeypress="if(event.key === 'Enter') doLogin();">
+            <button type="button" id="login-btn" class="auth-btn" onclick="doLogin()">Login</button>
+        </div>
+        
+        <a href="{{ url_for('register') }}" class="auth-link" style="margin-top: 20px;">Don't have an account? Register</a>
+        
+        {% if error %}<p class="auth-error" style="display: block;">{{ error }}</p>{% endif %}
+        <p id="error-msg" class="auth-error"></p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="{{ url_for('static', filename='js/crypto.js') }}"></script>
+
+<script>
+    console.log("Login Script loaded! If you see this, the JS is successfully running."); 
+
+    async function doLogin() {
+        console.log("Login sequence initiated...");
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        const errorMsg = document.getElementById('error-msg');
+        const loginBtn = document.getElementById('login-btn');
+
+        if (!username || !password) {
+            errorMsg.innerText = "Please fill in both fields.";
+            errorMsg.style.display = "block";
+            return;
+        }
+
+        loginBtn.innerText = "Decrypting...";
+        loginBtn.disabled = true;
+        errorMsg.style.display = "none";
+
+        try {
+            const response = await fetch("{{ url_for('login') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ username: username, password: password })
+            });
+            
+            const data = await response.json();
+
+            if (data.success) {
+                if (data.encrypted_sync_key) {
+                    const rawKey = unwrapSyncKey(data.encrypted_sync_key, password);
+                    if (rawKey) {
+                        setActiveKey(rawKey);
+                        window.location.href = "{{ url_for('index') }}"; 
+                    } else {
+                        throw new Error("Wrong password or corrupted encryption key.");
+                    }
+                } else {
+                    window.location.href = "{{ url_for('index') }}";
+                }
+            } else {
+                errorMsg.innerText = data.error || "Invalid username or password.";
+                errorMsg.style.display = "block";
+                loginBtn.innerText = "Login";
+                loginBtn.disabled = false;
+            }
+        } catch (err) {
+            console.error("Login Error:", err);
+            errorMsg.innerText = err.message || "An error occurred during secure login.";
+            errorMsg.style.display = "block";
+            loginBtn.innerText = "Login";
+            loginBtn.disabled = false;
+        }
+    }
+</script>
+{% endblock %}

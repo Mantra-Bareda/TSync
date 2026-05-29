@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="app-container">
+    
+    <div id="sidebar">
+        <div id="sidebar-header">
+            <span>My Lists</span>
+            <button id="new-todo-list-btn" class="action-btn">+ New</button>
+        </div>
+        <div id="todo-sidebar-list" class="sidebar-list" style="flex-grow: 1; overflow-y: auto;"></div>
+    </div>
+
+    <div id="main-area" style="position: relative; background: var(--background); overflow-y: auto;">
+        
+        <div class="todo-main-wrapper" style="margin: 0 auto; width: 100%; max-width: 800px; padding: 40px 20px;">
+            
+            <div id="chat-header" style="border-bottom: none; padding: 0 0 20px 0; display: flex; justify-content: space-between; align-items: center;">
+                <span id="current-list-title" style="font-size: 2rem; font-weight: 700;">Select a list</span>
+                
+                <div id="todo-progress-container" style="display: none; align-items: center; gap: 10px;">
+                    <span id="todo-progress-text" style="font-size: 0.9rem; color: var(--accent-fg);">0/0</span>
+                    <div style="width: 100px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;">
+                        <div id="todo-progress-bar" style="height: 100%; width: 0%; background: var(--primary); transition: width 0.4s ease;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="todo-tree" class="todo-tree-container"></div>
+
+            <div id="main-add-box" class="add-task-box" style="display: none;">
+                <span>+ Add Task</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="context-menu"></div>
+</div>
+
+<template id="task-input-template">
+    <div class="task-input-form">
+        <input type="text" class="task-title-input" placeholder="Task title..." autocomplete="off">
+        <input type="text" class="task-desc-input" placeholder="Description (optional)..." autocomplete="off">
+        <div class="task-input-actions">
+            <button class="save-task-btn">Save</button>
+            <button class="cancel-task-btn">Cancel</button>
+        </div>
+    </div>
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/todo.js') }}"></script>
+{% endblock %}

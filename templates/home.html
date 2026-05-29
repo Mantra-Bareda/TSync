@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="home-wrapper">
+    <div class="home-header">
+        <h1 class="home-title">Welcome back, {{ session.get('username') }}</h1>
+        <p class="home-subtitle">Select an application to continue.</p>
+    </div>
+    
+    <div class="feature-grid">
+        
+        <a href="{{ url_for('chat') }}" class="feature-card">
+            <div class="feature-icon">💬</div>
+            <div class="feature-title">TSync Chat</div>
+            <div class="feature-desc">Secure, end-to-end encrypted personal clipboard and cross-device file syncing.</div>
+        </a>
+        
+        <a href="{{ url_for('todo') }}" class="feature-card">
+            <div class="feature-icon">✓</div>
+            <div class="feature-title">Todo</div>
+            <div class="feature-desc">Manage your tasks, track progress, and stay organized throughout your day.</div>
+        </a>
+        
+        <a href="{{ url_for('diary') }}" class="feature-card">
+            <div class="feature-icon">📓</div>
+            <div class="feature-title">Diary</div>
+            <div class="feature-desc">Your private, encrypted personal journal. Write down your thoughts securely.</div>
+        </a>
+        
+        <a href="{{ url_for('reminders') }}" class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <div class="feature-title">Reminders</div>
+            <div class="feature-desc">Never forget an important task with synchronized notifications.</div>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

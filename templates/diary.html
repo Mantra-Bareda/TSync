@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="app-container">
+    
+    <div id="sidebar" class="diary-mobile-sidebar" style="min-width: 320px;">
+        <div id="sidebar-header" style="justify-content: center; margin-bottom: 30px;">
+            <span style="font-size: 1.4rem; font-weight: 700;">Journal</span>
+        </div>
+        
+        <div class="calendar-widget">
+            <div class="calendar-header">
+                <button id="cal-prev-btn" class="cal-nav-btn">◀</button>
+                <div id="cal-month-year">Month Year</div>
+                <button id="cal-next-btn" class="cal-nav-btn">▶</button>
+            </div>
+            <div class="calendar-days-header">
+                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+        </div>
+    </div>
+
+    
+
+    <div id="main-area" style="position: relative; background: var(--background); overflow-y: auto;">
+
+        <button id="mobile-calendar-btn" onclick="toggleMobileCalendar()">
+    📅 Open Calendar
+</button>
+        
+        <div class="diary-main-wrapper" style="margin: 0 auto; width: 100%; max-width: 800px; padding: 40px 20px; height: 100%; display: flex; flex-direction: column;">
+            
+            <div class="diary-header" style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+                <div style="flex-grow: 1;">
+                    <h1 id="diary-display-date" style="font-size: 2.2rem; font-weight: 700; color: var(--foreground); margin-bottom: 8px;">Loading...</h1>
+                    <div id="diary-metadata" style="font-size: 0.9rem; font-weight: 500; color: var(--muted-fg); background: var(--muted); padding: 4px 10px; border-radius: 6px; display: inline-block;">
+                        <span id="meta-status">Initializing secure connection...</span>
+                    </div>
+                </div>
+                
+                <div id="diary-controls" style="display: none; gap: 10px; margin-top: 5px;">
+                    <button id="edit-diary-btn" class="action-btn">Edit Entry</button>
+                    <button id="save-diary-btn" class="action-btn" style="background: var(--primary); color: var(--primary-fg); display: none;">Save Changes</button>
+                    <button id="cancel-diary-btn" class="action-btn danger" style="display: none; background: transparent; color: var(--destructive); border-color: var(--destructive);">Cancel</button>
+                </div>
+            </div>
+
+            <div id="diary-content-area" style="flex-grow: 1; display: flex; flex-direction: column;">
+                
+                <div id="diary-empty-state" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--muted-fg); gap: 15px;">
+                    <span style="font-size: 3rem;">📓</span>
+                    <button id="create-diary-btn" class="action-btn" style="background: var(--primary); color: var(--primary-fg); font-size: 1.1rem; padding: 10px 20px;">Write Entry</button>
+                </div>
+
+                <div id="diary-read-mode" class="diary-text-content" style="display: none;"></div>
+                <textarea id="diary-edit-mode" class="diary-textarea" style="display: none;" placeholder="Write your thoughts here..."></textarea>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/diary.js') }}?v=999"></script>
+
+<script>
+// --- MOBILE CALENDAR SMART TOGGLE ---
+function toggleMobileCalendar() {
+    // FIX: Look for 'sidebar' instead of 'diary-sidebar'
+    const sidebar = document.getElementById('sidebar');
+    const btn = document.getElementById('mobile-calendar-btn');
+    
+    sidebar.classList.toggle('mobile-active');
+    
+    if (sidebar.classList.contains('mobile-active')) {
+        btn.innerHTML = '❌ Close Calendar';
+    } else {
+        btn.innerHTML = '📅 Open Calendar';
+    }
+}
+
+// Auto-close the calendar popup when a date is clicked
+document.addEventListener('click', function(e) {
+    if (window.innerWidth <= 768) {
+        if (e.target.classList.contains('calendar-day') || e.target.closest('.calendar-day')) {
+            const sidebar = document.getElementById('sidebar');
+            const btn = document.getElementById('mobile-calendar-btn');
+            
+            if (sidebar && sidebar.classList.contains('mobile-active')) {
+                sidebar.classList.remove('mobile-active');
+                btn.innerHTML = '📅 Open Calendar';
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; padding: 20px;">
+    <div style="background: var(--nav-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-soft);">
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px;">
+            <div style="width: 80px; height: 80px; background: var(--primary); color: var(--primary-fg); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold;">
+                {{ session.username[0] | upper }}
+            </div>
+            <div>
+                <h1 style="margin: 0; font-size: 1.8rem; color: var(--foreground);">{{ session.username }}</h1>
+                <p style="margin: 5px 0 0 0; color: var(--muted-fg);">E2EE Secured Account</p>
+            </div>
+        </div>
+
+        {% if success %}
+            <div style="background: rgba(0, 255, 0, 0.1); color: #00ff00; padding: 10px; border-radius: 8px; margin-bottom: 20px;">{{ success }}</div>
+        {% endif %}
+        {% if error %}
+            <div style="background: rgba(255, 0, 0, 0.1); color: var(--destructive); padding: 10px; border-radius: 8px; margin-bottom: 20px;">{{ error }}</div>
+        {% endif %}
+
+        <h3 style="color: var(--foreground); margin-bottom: 15px;">Change Account Password</h3>
+        <p style="color: var(--muted-fg); font-size: 0.9rem; margin-bottom: 15px;">Because your password locks your encryption key, changing it will automatically re-wrap your secure data behind the scenes.</p>
+        
+        <form id="password-change-form" action="{{ url_for('update_password') }}" method="POST" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+            <input type="password" id="new-password" name="new_password" placeholder="Enter New Password" required style="width: 100%; background: var(--background); border: 1px solid var(--border); padding: 12px; border-radius: 8px; color: var(--foreground); font-size: 1rem;">
+            
+            <input type="hidden" id="new-encrypted-sync-key" name="new_encrypted_sync_key" value="">
+            
+            <button type="submit" id="update-btn" class="action-btn" style="background: var(--primary); color: var(--primary-fg); align-self: flex-start;">Update Password & Key</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script src="{{ url_for('static', filename='js/crypto.js') }}"></script>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
